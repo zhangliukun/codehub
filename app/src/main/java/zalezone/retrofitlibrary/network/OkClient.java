@@ -98,6 +98,11 @@ public class OkClient{
         httpPostAsync(request,requestCallback,dataCallback);
     }
 
+    public static <T> void httpPostRequestForJson(String url,String postString,IDataCallback<T> dataCallback,IRequestCallback<T> requestCallback){
+        Request request = OkBuilder.urlPost(url,postString).build();
+        httpPostAsync(request,requestCallback,dataCallback);
+    }
+
 
 
 }

@@ -20,6 +20,8 @@ public class OkBuilder {
     public static final MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
 
 
+
+
     public static Request.Builder urlGet(String url, Map<String,String> params){
         if (params !=null && params.isEmpty()){
             url = url + "?" + OkUtil.convertMap2SGetParams(params,false);
