@@ -1,5 +1,6 @@
 package zalezone.retrofitlibrary.network;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -8,12 +9,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import zalezone.retrofitlibrary.manager.AccountManager;
 import zalezone.retrofitlibrary.network.constants.MsgConstants;
 
 /**
@@ -39,6 +42,17 @@ public class OkClient{
 
     }
 
+    public static void initOkHttp(Context context){
+        OkConfig okConfig = new OkConfig();
+        okConfig.authorization = AccountManager.getLoginToken(context);
+        OkBuilder.setOkConfig(okConfig);
+        OkHttpClient.Builder builder = mOkHttpClient.newBuilder();
+        builder.connectTimeout(okConfig.connectionTimeout, TimeUnit.MILLISECONDS);
+        builder.readTimeout(okConfig.readTimeout,TimeUnit.MILLISECONDS);
+        mOkHttpClient = builder.build();
+    }
+
+
     private static <T> void processResponse(Response response,IRequestCallback<T> requestCallback,IDataCallback<T> dataCallback) throws IOException {
         String responseStr = response.body().string();
         try {
@@ -57,7 +71,7 @@ public class OkClient{
     }
 
     //异步get
-    public static <T> void httpGetAsync(Request request, final IRequestCallback<T> requestCallback, final IDataCallback<T> dataCallback){
+    private static <T> void httpGetAsync(Request request, final IRequestCallback<T> requestCallback, final IDataCallback<T> dataCallback){
 
         getOkHttpClient().newCall(request).enqueue(new Callback() {
             @Override
@@ -73,7 +87,7 @@ public class OkClient{
     }
 
 
-    public static <T> void httpPostAsync(Request request, final IRequestCallback<T> requestCallback, final IDataCallback<T> dataCallback){
+    private static <T> void httpPostAsync(Request request, final IRequestCallback<T> requestCallback, final IDataCallback<T> dataCallback){
             getOkHttpClient().newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {

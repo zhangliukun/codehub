@@ -1,18 +1,19 @@
-package zalezone.retrofitlibrary;
+package zalezone.retrofitlibrary.view.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import okhttp3.Headers;
+import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.githubapi.GithubApi;
+import zalezone.retrofitlibrary.manager.AccountManager;
 import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.network.IDataCallback;
-import zalezone.retrofitlibrary.util.sharepreference.SharePreferenceConstants;
-import zalezone.retrofitlibrary.util.sharepreference.SharePreferenceUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(MainActivity.this,message,Toast.LENGTH_LONG).show();
 //                    }
 //                });
-                GithubApi.login("zhangliukun", "zlk19941117", new IDataCallback<Authorization>() {
+                GithubApi.login("test", "test", new IDataCallback<Authorization>() {
                     @Override
                     public void onSuccess(Authorization object, Headers headers) {
                         if (object!=null){
                             textView.setText(object.toString()+"");
-                            SharePreferenceUtil.getInstance(MainActivity.this).saveString(SharePreferenceConstants.USER_TOKEN,object.getToken());
+                            AccountManager.saveLoginToken(MainActivity.this,"token "+object.getToken());
 
                         }
                     }
@@ -60,5 +61,25 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+        findViewById(R.id.user).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GithubApi.user(new IDataCallback<String>() {
+                    @Override
+                    public void onSuccess(String object, Headers headers) {
+                        if (!TextUtils.isEmpty(object)){
+                            textView.setText(object+"");
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(int code, String message) {
+
+                    }
+                });
+            }
+        });
+
     }
 }

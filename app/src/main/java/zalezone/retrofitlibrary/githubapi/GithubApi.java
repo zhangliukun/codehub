@@ -9,6 +9,7 @@ import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.model.CreateAuthorization;
 import zalezone.retrofitlibrary.network.IDataCallback;
 import zalezone.retrofitlibrary.network.IRequestCallback;
+import zalezone.retrofitlibrary.network.OkBuilder;
 import zalezone.retrofitlibrary.network.OkClient;
 import zalezone.retrofitlibrary.network.util.Base64Encoder;
 
@@ -22,7 +23,7 @@ public class GithubApi {
         String authorization = userName+":"+password;
         try {
             String base64Result = "Basic "+Base64Encoder.encode(authorization);
-            GithubConfig.authorization = base64Result;
+            OkBuilder.updateAuthorization(base64Result);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -42,8 +43,18 @@ public class GithubApi {
                 return new Gson().fromJson(content,Authorization.class);
             }
         });
-
     }
+
+    public static void user(IDataCallback<String> dataCallback){
+        OkClient.httpGetRequest("https://api.github.com/user",null,dataCallback, new IRequestCallback<String>() {
+            @Override
+            public String success(String content) {
+                return content;
+            }
+        });
+    }
+
+
 
     public static void users(String userName,IDataCallback<String> dataCallback){
         String url = "https://api.github.com/users/"+userName;

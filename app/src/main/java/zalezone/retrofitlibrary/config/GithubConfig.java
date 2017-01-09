@@ -14,6 +14,4 @@ public class GithubConfig {
     public static final String[] SCOPES = {"user", "repo"};
 
     public static final String NOTE = "codehub";
-
-    public static String authorization;
 }

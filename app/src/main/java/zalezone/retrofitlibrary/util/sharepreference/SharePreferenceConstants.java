@@ -5,5 +5,5 @@ package zalezone.retrofitlibrary.util.sharepreference;
  */
 
 public class SharePreferenceConstants {
-    public final static String USER_TOKEN = "user_token";
+
 }

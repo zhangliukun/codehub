@@ -6,6 +6,11 @@ package zalezone.retrofitlibrary.network;
 
 public class OkConfig {
 
-
+    public boolean useProxy = false;
+    public boolean useCache = false;
+    public String proxyHost;
+    public String authorization;
+    public int connectionTimeout = 30000;//30s
+    public int readTimeout = 30000;
 
 }
