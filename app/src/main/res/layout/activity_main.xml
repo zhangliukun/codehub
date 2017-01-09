@@ -22,6 +22,6 @@
         android:id="@+id/testTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/btnT"
+        android:layout_below="@id/btnT"
         android:text="Hello World!" />
 </RelativeLayout>

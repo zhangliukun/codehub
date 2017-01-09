@@ -21,6 +21,10 @@ import java.util.Map;
 
 public class SharePreferenceUtil {
 
+    public final static String DEFAULT_DATA = "code_hub_data";
+
+    private volatile static SharePreferenceUtil mInstance;
+
     private SharedPreferences settings;
 
     public static final int SHARE_MODEL = Build.VERSION.SDK_INT >= 24 ? Context.MODE_MULTI_PROCESS :
@@ -30,8 +34,16 @@ public class SharePreferenceUtil {
         settings = context.getSharedPreferences(name, SHARE_MODEL);
     }
 
-
-
+    public static SharePreferenceUtil getInstance(Context context){
+        if (mInstance == null){
+            synchronized (SharePreferenceUtil.class){
+                if (mInstance == null){
+                    mInstance = new SharePreferenceUtil(context,DEFAULT_DATA);
+                }
+            }
+        }
+        return mInstance;
+    }
 
     public void saveLong(String key, long value) {
         apply(settings.edit().putLong(key, value));

@@ -4,12 +4,11 @@ import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 
-import okhttp3.Request;
 import zalezone.retrofitlibrary.config.GithubConfig;
+import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.model.CreateAuthorization;
 import zalezone.retrofitlibrary.network.IDataCallback;
 import zalezone.retrofitlibrary.network.IRequestCallback;
-import zalezone.retrofitlibrary.network.OkBuilder;
 import zalezone.retrofitlibrary.network.OkClient;
 import zalezone.retrofitlibrary.network.util.Base64Encoder;
 
@@ -19,12 +18,11 @@ import zalezone.retrofitlibrary.network.util.Base64Encoder;
 
 public class GithubApi {
 
-    public static void authentication(String userName,String password,IDataCallback<String> dataCallback){
+    public static void login(String userName, String password, IDataCallback<Authorization> dataCallback){
         String authorization = userName+":"+password;
         try {
             String base64Result = "Basic "+Base64Encoder.encode(authorization);
-            Request request = OkBuilder.urlPost("https://api.github.com","").header("Authorization",base64Result).build();
-            //OkClient.httpPostAsync(request,);
+            GithubConfig.authorization = base64Result;
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -38,10 +36,10 @@ public class GithubApi {
 
         String str = new Gson().toJson(createAuthorization,CreateAuthorization.class);
 
-        OkClient.httpPostRequestForJson("https://api.github.com", str, dataCallback, new IRequestCallback<String>() {
+        OkClient.httpPostRequestForJson("https://api.github.com/authorizations", str, dataCallback, new IRequestCallback<Authorization>() {
             @Override
-            public String success(String content) {
-                return null;
+            public Authorization success(String content) {
+                return new Gson().fromJson(content,Authorization.class);
             }
         });
 

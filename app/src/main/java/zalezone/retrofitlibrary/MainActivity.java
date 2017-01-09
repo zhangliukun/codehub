@@ -9,7 +9,10 @@ import android.widget.Toast;
 
 import okhttp3.Headers;
 import zalezone.retrofitlibrary.githubapi.GithubApi;
+import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.network.IDataCallback;
+import zalezone.retrofitlibrary.util.sharepreference.SharePreferenceConstants;
+import zalezone.retrofitlibrary.util.sharepreference.SharePreferenceUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,18 +24,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final TextView textView = (TextView) findViewById(R.id.testTV);
-        final String text = null;
-        Toast.makeText(this,text+"",Toast.LENGTH_LONG).show();
+//        final String text = null;
+//        Toast.makeText(this,text+"",Toast.LENGTH_LONG).show();
 
 
         findViewById(R.id.btnT).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                GithubApi.authentication();
-                GithubApi.users("zhangliukun", new IDataCallback<String>() {
+//                GithubApi.users("zhangliukun", new IDataCallback<String>() {
+//                    @Override
+//                    public void onSuccess(String object, Headers headers) {
+//                        Toast.makeText(MainActivity.this,object,Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onError(int code, String message) {
+//                        Toast.makeText(MainActivity.this,message,Toast.LENGTH_LONG).show();
+//                    }
+//                });
+                GithubApi.login("zhangliukun", "zlk19941117", new IDataCallback<Authorization>() {
                     @Override
-                    public void onSuccess(String object, Headers headers) {
-                        Toast.makeText(MainActivity.this,object,Toast.LENGTH_LONG).show();
+                    public void onSuccess(Authorization object, Headers headers) {
+                        if (object!=null){
+                            textView.setText(object.toString()+"");
+                            SharePreferenceUtil.getInstance(MainActivity.this).saveString(SharePreferenceConstants.USER_TOKEN,object.getToken());
+
+                        }
                     }
 
                     @Override

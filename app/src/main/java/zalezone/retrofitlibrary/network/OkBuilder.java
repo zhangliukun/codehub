@@ -1,11 +1,14 @@
 package zalezone.retrofitlibrary.network;
 
+import android.text.TextUtils;
+
 import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import zalezone.retrofitlibrary.config.GithubConfig;
 import zalezone.retrofitlibrary.network.util.OkUtil;
 
 /**
@@ -48,7 +51,10 @@ public class OkBuilder {
     }
 
     public static Request.Builder addCommonCookie(Request.Builder builder){
-        //builder.header();
+        if (!TextUtils.isEmpty(GithubConfig.authorization)){
+            builder.header("Authorization",GithubConfig.authorization);
+            GithubConfig.authorization = null;
+        }
         return builder;
     }
 }
