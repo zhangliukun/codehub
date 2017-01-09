@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 
-import zalezone.retrofitlibrary.config.GithubConfig;
+import zalezone.retrofitlibrary.common.config.GithubConfig;
 import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.model.CreateAuthorization;
 import zalezone.retrofitlibrary.network.IDataCallback;

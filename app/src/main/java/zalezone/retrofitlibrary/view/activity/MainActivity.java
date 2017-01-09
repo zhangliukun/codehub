@@ -1,7 +1,6 @@
 package zalezone.retrofitlibrary.view.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,8 +15,6 @@ import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.network.IDataCallback;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Handler mHander = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

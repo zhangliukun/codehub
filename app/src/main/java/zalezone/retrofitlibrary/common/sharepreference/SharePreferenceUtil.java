@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.util.sharepreference;
+package zalezone.retrofitlibrary.common.sharepreference;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

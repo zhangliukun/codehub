@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.config;
+package zalezone.retrofitlibrary.common.config;
 
 /**
  * Created by zale on 2017/1/3.

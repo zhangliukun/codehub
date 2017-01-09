@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.network.OkBuilder;
-import zalezone.retrofitlibrary.util.sharepreference.SharePreferenceUtil;
+import zalezone.retrofitlibrary.common.sharepreference.SharePreferenceUtil;
 
 /**
  * Created by zale on 2017/1/9.
