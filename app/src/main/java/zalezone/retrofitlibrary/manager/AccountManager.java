@@ -30,8 +30,12 @@ public class AccountManager {
         SharePreferenceUtil.getInstance(context).removeByKey(USER_TOKEN);
     }
 
+    public static void loginOut(Context context){
+        clearLoginToken(context);
+    }
+
     public static boolean hasLogin(Context context){
-        return TextUtils.isEmpty(getLoginToken(context));
+        return !TextUtils.isEmpty(getLoginToken(context))&&!TextUtils.isEmpty(OkBuilder.getOkConfig().authorization);
     }
 
 }

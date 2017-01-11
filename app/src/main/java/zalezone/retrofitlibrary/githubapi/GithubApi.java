@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import zalezone.retrofitlibrary.common.config.GithubConfig;
 import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.model.CreateAuthorization;
+import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.network.IDataCallback;
 import zalezone.retrofitlibrary.network.IRequestCallback;
 import zalezone.retrofitlibrary.network.OkBuilder;
@@ -45,11 +46,11 @@ public class GithubApi {
         });
     }
 
-    public static void user(IDataCallback<String> dataCallback){
-        OkClient.httpGetRequest("https://api.github.com/user",null,dataCallback, new IRequestCallback<String>() {
+    public static void user(IDataCallback<UserInfo> dataCallback){
+        OkClient.httpGetRequest("https://api.github.com/user",null,dataCallback, new IRequestCallback<UserInfo>() {
             @Override
-            public String success(String content) {
-                return content;
+            public UserInfo success(String content) {
+                return new Gson().fromJson(content,UserInfo.class);
             }
         });
     }

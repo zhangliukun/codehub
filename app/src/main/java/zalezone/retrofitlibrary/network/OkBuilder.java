@@ -32,6 +32,9 @@ public class OkBuilder {
         mOkConfig.authorization = authorization;
     }
 
+    public static OkConfig getOkConfig() {
+        return mOkConfig;
+    }
 
     public static Request.Builder urlGet(String url, Map<String,String> params){
         if (params !=null && params.isEmpty()){

@@ -2,6 +2,10 @@ package zalezone.retrofitlibrary;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+
 import zalezone.retrofitlibrary.network.OkClient;
 
 /**
@@ -14,5 +18,7 @@ public class MainApplication extends Application{
     public void onCreate() {
         super.onCreate();
         OkClient.initOkHttp(this);
+        ImagePipelineConfig config = OkHttpImagePipelineConfigFactory.newBuilder(this,OkClient.getOkHttpClient()).build();
+        Fresco.initialize(this,config);
     }
 }
