@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         GithubApi.login(accountName, password, new IDataCallback<Authorization>() {
             @Override
             public void onSuccess(Authorization object, Headers headers) {
-                if (object != null) {
+                if (object != null&&!TextUtils.isEmpty(object.getToken())) {
                     AccountManager.saveLoginToken(MainActivity.this, "token " + object.getToken());
                     showToastShort("登录成功");
                     GithubApi.user(new IDataCallback<UserInfo>() {
@@ -116,12 +116,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             if (object != null && !TextUtils.isEmpty(object.getAvatar_url())) {
                                 ImageUitl.loadUriPic(object.getAvatar_url(), avatarView);
                                 userNameTv.setText(object.getName());
-                                userDescptionTv.setText(object.getBlog());
+                                userDescptionTv.setText(object.getEmail());
                             }
                         }
 
                         @Override
                         public void onError(int code, String message) {
+                            showToastShort(code+message);
                             hideProgressDialog();
                         }
                     });

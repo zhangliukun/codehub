@@ -4,9 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -54,19 +51,12 @@ public class OkClient{
 
 
     private static <T> void processResponse(Response response,IRequestCallback<T> requestCallback,IDataCallback<T> dataCallback) throws IOException {
-        String responseStr = response.body().string();
-        try {
-            JSONObject repJson = new JSONObject(responseStr);
-            int ret = repJson.optInt("ret",-1);
-            if (ret!=0){
-                delivery.postSuccess(dataCallback,requestCallback.success(responseStr),response.headers());
+        if (response.code()>=300){
+            delivery.postError(dataCallback,response.code(),response.message());
+        }else {
+            String responseStr = response.body().string();
+            delivery.postSuccess(dataCallback,requestCallback.success(responseStr),response.headers());
 
-            }else {
-                delivery.postError(dataCallback,ret, MsgConstants.NET_ERR_CONTENT);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
