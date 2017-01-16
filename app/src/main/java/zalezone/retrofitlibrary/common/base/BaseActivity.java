@@ -77,8 +77,6 @@ public abstract class BaseActivity extends AppCompatActivity{
         progressDialog.show();
     }
 
-    public int getContainerLayoutId(){
-        return -1;
-    }
+    public abstract int getContainerLayoutId();
 
 }

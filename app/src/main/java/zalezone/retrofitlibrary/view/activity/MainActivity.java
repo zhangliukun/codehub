@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ import zalezone.retrofitlibrary.view.adapter.adapterimpl.MenuItemAdapter;
 import zalezone.retrofitlibrary.view.dialog.DialogBuilder;
 
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -56,6 +57,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initMenuHeader();
         mDrawerList.addHeaderView(menuHeader);
         mDrawerList.setAdapter(mAdapter);
+        mDrawerList.setOnItemClickListener(this);
     }
 
     @Override
@@ -251,5 +253,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch ((int) id){
+            case 0:
+                break;
+            default:
+                break;
+        }
     }
 }

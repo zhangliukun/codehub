@@ -10,6 +10,17 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="HalfScreenTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle"></item>
+        <item name="android:background">@color/transparent</item>
+
+    </style>
+
     <style name="BasicTextViewTheme">
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_width">wrap_content</item>
