@@ -61,81 +61,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     }
 
     @Override
-    public int getContainerLayoutId() {
-        return R.layout.activity_main;
+    public void loadData() {
+        loadMenuItem();
+        checkLogin();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.user_avatar:
-                if (AccountManager.hasLogin(this)) {
-                    AccountManager.loginOut(this);
-                    ImageUitl.loadUriPic("", avatarView);
-                } else {
-                    View loginView = View.inflate(this, R.layout.view_login_dialog, null);
-                    final EditText accountEt = (EditText) loginView.findViewById(R.id.et_account);
-                    final EditText passwordEt = (EditText) loginView.findViewById(R.id.et_password);
-                    DialogBuilder builder = new DialogBuilder(this);
-                    builder.setContentView(loginView)
-                            .setPositiveBtnCallback("登录", new DialogBuilder.OnBtnClickListener() {
-                                @Override
-                                public void exectute() {
-                                    String password = passwordEt.toString();
-                                    String account = accountEt.toString();
-                                    if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
-                                        showToastShort("账号或密码不能为空！");
-                                    }
-                                    githubLogin(account, password);
-                                }
-                            })
-                            .setNegativeBtnCallback("取消", new DialogBuilder.OnBtnClickListener() {
-                                @Override
-                                public void exectute() {
-
-                                }
-                            }).setTitle("账号登录").setMessage("username or email").showDialog();
-                }
-
-                break;
-            default:
-                break;
+    private void checkLogin() {
+        if (AccountManager.hasLogin(this)){
+            refreshUserInfo(AccountManager.getUser());
+        }else {
+            showLoginDialog();
         }
-    }
-
-    private void githubLogin(String accountName, String password) {
-        showProgressDialog();
-        GithubApi.login(accountName, password, new IDataCallback<Authorization>() {
-            @Override
-            public void onSuccess(Authorization object, Headers headers) {
-                if (object != null&&!TextUtils.isEmpty(object.getToken())) {
-                    AccountManager.saveLoginToken(MainActivity.this, "token " + object.getToken());
-                    showToastShort("登录成功");
-                    GithubApi.user(new IDataCallback<UserInfo>() {
-                        @Override
-                        public void onSuccess(UserInfo object, Headers headers) {
-                            hideProgressDialog();
-                            if (object != null && !TextUtils.isEmpty(object.getAvatar_url())) {
-                                ImageUitl.loadUriPic(object.getAvatar_url(), avatarView);
-                                userNameTv.setText(object.getName());
-                                userDescptionTv.setText(object.getEmail());
-                            }
-                        }
-
-                        @Override
-                        public void onError(int code, String message) {
-                            showToastShort(code+message);
-                            hideProgressDialog();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                showToastShort("登录失败" + code + message);
-            }
-        });
     }
 
     private void initMenuHeader() {
@@ -148,76 +84,104 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     }
 
     @Override
-    public void loadData() {
-        List<MenuItemModel> dataList = new ArrayList<>();
-        dataList.add(new MenuItemModel("Home"));
-        dataList.add(new MenuItemModel("Repositories"));
-        mAdapter.addListData(dataList);
-        mAdapter.notifyDataSetChanged();
-
+    public int getContainerLayoutId() {
+        return R.layout.activity_main;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.user_avatar:
+                if (AccountManager.hasLogin(this)) {
+                    AccountManager.loginOut(this);
+                    ImageUitl.loadUriPic("", avatarView);
+                } else {
+                    showLoginDialog();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
-//        final TextView textView = (TextView) findViewById(R.id.testTV);
-////        final String text = null;
-////        Toast.makeText(this,text+"",Toast.LENGTH_LONG).show();
-//
-//
-//        findViewById(R.id.btnT).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                GithubApi.authentication();
-////                GithubApi.users("zhangliukun", new IDataCallback<String>() {
-////                    @Override
-////                    public void onSuccess(String object, Headers headers) {
-////                        Toast.makeText(MainActivity.this,object,Toast.LENGTH_LONG).show();
-////                    }
-////
-////                    @Override
-////                    public void onError(int code, String message) {
-////                        Toast.makeText(MainActivity.this,message,Toast.LENGTH_LONG).show();
-////                    }
-////                });
-//                GithubApi.login("test", "test", new IDataCallback<Authorization>() {
-//                    @Override
-//                    public void onSuccess(Authorization object, Headers headers) {
-//                        if (object!=null){
-//                            textView.setText(object.toString()+"");
-//                            AccountManager.saveLoginToken(MainActivity.this,"token "+object.getToken());
-//
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(int code, String message) {
-//                        Toast.makeText(MainActivity.this,message,Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//            }
-//        });
-//        findViewById(R.id.user).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GithubApi.user(new IDataCallback<String>() {
-//                    @Override
-//                    public void onSuccess(String object, Headers headers) {
-//                        if (!TextUtils.isEmpty(object)){
-//                            textView.setText(object+"");
-//
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(int code, String message) {
-//
-//                    }
-//                });
-//            }
-//        });
+    private void showLoginDialog() {
+        View loginView = View.inflate(this, R.layout.view_login_dialog, null);
+        final EditText accountEt = (EditText) loginView.findViewById(R.id.et_account);
+        final EditText passwordEt = (EditText) loginView.findViewById(R.id.et_password);
+        DialogBuilder builder = new DialogBuilder(this);
+        builder.setContentView(loginView)
+                .setPositiveBtnCallback("登录", new DialogBuilder.OnBtnClickListener() {
+                    @Override
+                    public void exectute() {
+                        String password = passwordEt.getText().toString();
+                        String account = accountEt.getText().toString();
+                        if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
+                            showToastShort("账号或密码不能为空！");
+                        }
+                        githubLogin(account, password);
+                    }
+                })
+                .setNegativeBtnCallback("取消", new DialogBuilder.OnBtnClickListener() {
+                    @Override
+                    public void exectute() {
 
+                    }
+                }).setTitle("账号登录").setMessage("username or email").showDialog();
+    }
+
+    private void githubLogin(String accountName, String password) {
+        showProgressDialog();
+        GithubApi.login(accountName, password, new IDataCallback<Authorization>() {
+            @Override
+            public void onSuccess(Authorization object, Headers headers) {
+                if (object != null&&!TextUtils.isEmpty(object.getToken())) {
+                    AccountManager.saveLoginToken(MainActivity.this, "token " + object.getToken());
+                    githubUserInfo();
+                }
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                showToastShort("登录失败" + code + message);
+            }
+        });
+    }
+
+    private void githubUserInfo(){
+        GithubApi.user(new IDataCallback<UserInfo>() {
+            @Override
+            public void onSuccess(UserInfo object, Headers headers) {
+                hideProgressDialog();
+                if (object != null && !TextUtils.isEmpty(object.getAvatar_url())) {
+                    AccountManager.setUser(object);
+                    refreshUserInfo(object);
+                    showToastShort("登录成功");
+                }
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                showToastShort(code+message);
+                hideProgressDialog();
+            }
+        });
+    }
+
+    private void refreshUserInfo(UserInfo userInfo){
+        ImageUitl.loadUriPic(userInfo.getAvatar_url(), avatarView);
+        userNameTv.setText(userInfo.getName());
+        userDescptionTv.setText(userInfo.getEmail());
+    }
+
+
+    private void loadMenuItem() {
+        String[] arrays = getResources().getStringArray(R.array.github_menu_navigation);
+        List<MenuItemModel> dataList = new ArrayList<>();
+        for (String menuItem:arrays){
+            dataList.add(new MenuItemModel(menuItem));
+        }
+        mAdapter.addListData(dataList);
+        mAdapter.notifyDataSetChanged();
     }
 
     private void initToolBar() {

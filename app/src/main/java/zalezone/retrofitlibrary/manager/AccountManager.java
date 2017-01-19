@@ -13,7 +13,7 @@ import zalezone.retrofitlibrary.common.sharepreference.SharePreferenceUtil;
 
 public class AccountManager {
 
-    public static UserInfo user;
+    public static UserInfo mUser;
     public final static String USER_TOKEN = "user_token";
 
     public static void saveLoginToken(Context context,String loginToken){
@@ -27,15 +27,28 @@ public class AccountManager {
 
     public static void clearLoginToken(Context context){
         OkBuilder.updateAuthorization("");
+        removeUser();
         SharePreferenceUtil.getInstance(context).removeByKey(USER_TOKEN);
+    }
+
+    public static boolean hasLogin(Context context){
+        return !TextUtils.isEmpty(getLoginToken(context))&&mUser!=null;
     }
 
     public static void loginOut(Context context){
         clearLoginToken(context);
     }
 
-    public static boolean hasLogin(Context context){
-        return !TextUtils.isEmpty(getLoginToken(context))&&!TextUtils.isEmpty(OkBuilder.getOkConfig().authorization);
+    public static void setUser(UserInfo user){
+        mUser = user;
+    }
+
+    public static UserInfo getUser(){
+        return mUser;
+    }
+
+    public static void removeUser(){
+        mUser = null;
     }
 
 }

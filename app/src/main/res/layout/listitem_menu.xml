@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
 
     <TextView
         android:id="@+id/menu_tv"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
+        android:paddingStart="@dimen/menu_hori_padding"
+        android:paddingEnd="@dimen/menu_hori_padding"
         android:maxLines="1"
-        android:gravity="start|center_vertical"/>
+        android:gravity="start|center_vertical"
+        android:drawableStart="@drawable/ic_home_black_18dp"
+        android:drawablePadding="16dp"/>
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="@dimen/menu_hori_padding"
+        android:background="@color/grey"/>
+
+</LinearLayout>
