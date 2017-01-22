@@ -49,6 +49,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
 
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //fix for white window background
+        setTheme(R.style.AppTheme);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void initView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.tool_bar);

@@ -91,7 +91,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter{
         if (AccountManager.hasLogin(taskView.getViewContext())){
             taskView.refreshUserInfo(AccountManager.getUser());
         }else {
-            taskView.showLoginDialog();
+            //taskView.showLoginDialog();
         }
     }
 
