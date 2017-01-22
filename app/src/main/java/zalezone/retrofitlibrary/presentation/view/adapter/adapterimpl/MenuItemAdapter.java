@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.view.adapter.adapterimpl;
+package zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl;
 
 import android.content.Context;
 import android.view.View;
@@ -8,7 +8,7 @@ import java.util.List;
 
 import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.model.MenuItemModel;
-import zalezone.retrofitlibrary.view.adapter.HolderAdapter;
+import zalezone.retrofitlibrary.presentation.view.adapter.HolderAdapter;
 
 /**
  * Created by zale on 16/8/29.

@@ -68,15 +68,14 @@ public abstract class BaseActivity extends AppCompatActivity{
         Toast.makeText(this, textId, Toast.LENGTH_LONG).show();
     }
 
-    public void hideProgressDialog() {
-        progressDialog.dismiss();
-    }
+    public abstract int getContainerLayoutId();
 
-    public void showProgressDialog() {
+    public void showOnLoading() {
         progressDialog.setMessage("Loading...");
         progressDialog.show();
     }
 
-    public abstract int getContainerLayoutId();
-
+    public void hideOnLoading() {
+        progressDialog.dismiss();
+    }
 }

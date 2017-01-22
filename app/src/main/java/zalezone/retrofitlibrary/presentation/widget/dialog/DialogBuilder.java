@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.view.dialog;
+package zalezone.retrofitlibrary.presentation.widget.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -1,5 +1,7 @@
-package zalezone.retrofitlibrary.view.activity;
+package zalezone.retrofitlibrary.presentation.view.activity;
 
+
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,21 +21,18 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Headers;
 import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.common.base.BaseActivity;
-import zalezone.retrofitlibrary.githubapi.GithubApi;
 import zalezone.retrofitlibrary.manager.AccountManager;
-import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.model.MenuItemModel;
 import zalezone.retrofitlibrary.model.UserInfo;
-import zalezone.retrofitlibrary.network.IDataCallback;
+import zalezone.retrofitlibrary.presentation.contract.MainActivityContract;
+import zalezone.retrofitlibrary.presentation.presenter.MainActivityPresenter;
+import zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl.MenuItemAdapter;
+import zalezone.retrofitlibrary.presentation.widget.dialog.DialogBuilder;
 import zalezone.retrofitlibrary.util.ImageUitl;
-import zalezone.retrofitlibrary.view.adapter.adapterimpl.MenuItemAdapter;
-import zalezone.retrofitlibrary.view.dialog.DialogBuilder;
 
-
-public class MainActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener,MainActivityContract.View{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -45,6 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     private SimpleDraweeView avatarView;
     private TextView userNameTv;
     private TextView userDescptionTv;
+
+    private MainActivityPresenter mPresenter;
 
 
     @Override
@@ -58,29 +59,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
         mDrawerList.addHeaderView(menuHeader);
         mDrawerList.setAdapter(mAdapter);
         mDrawerList.setOnItemClickListener(this);
+
     }
 
     @Override
     public void loadData() {
-        loadMenuItem();
-        checkLogin();
-    }
-
-    private void checkLogin() {
-        if (AccountManager.hasLogin(this)){
-            refreshUserInfo(AccountManager.getUser());
-        }else {
-            showLoginDialog();
-        }
-    }
-
-    private void initMenuHeader() {
-        menuHeader = View.inflate(this, R.layout.view_drawer_header, null);
-        menuHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.cyan));
-        avatarView = (SimpleDraweeView) menuHeader.findViewById(R.id.user_avatar);
-        userNameTv = (TextView) menuHeader.findViewById(R.id.tv_user_name);
-        userDescptionTv = (TextView) menuHeader.findViewById(R.id.tv_user_description);
-        avatarView.setOnClickListener(this);
+        mPresenter = new MainActivityPresenter(this);
+        mPresenter.start();
     }
 
     @Override
@@ -89,22 +74,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     }
 
     @Override
+    public Context getViewContext() {
+        return this;
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.user_avatar:
-                if (AccountManager.hasLogin(this)) {
-                    AccountManager.loginOut(this);
-                    ImageUitl.loadUriPic("", avatarView);
-                } else {
-                    showLoginDialog();
-                }
+                mPresenter.LoginOrOut();
                 break;
             default:
                 break;
         }
     }
 
-    private void showLoginDialog() {
+    @Override
+    public void showLogoutConfirmDialog() {
+        DialogBuilder builder = new DialogBuilder(this);
+        builder.setPositiveBtnCallback("确定", new DialogBuilder.OnBtnClickListener() {
+            @Override
+            public void exectute() {
+                AccountManager.loginOut(getViewContext());
+                clearAvatar();
+            }
+        }).setTitle("提醒").setMessage("确定要退出登录？").showDialog();
+    }
+
+    @Override
+    public void showLoginDialog() {
         View loginView = View.inflate(this, R.layout.view_login_dialog, null);
         final EditText accountEt = (EditText) loginView.findViewById(R.id.et_account);
         final EditText passwordEt = (EditText) loginView.findViewById(R.id.et_password);
@@ -118,7 +116,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
                         if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
                             showToastShort("账号或密码不能为空！");
                         }
-                        githubLogin(account, password);
+                        mPresenter.githubLogin(account,password);
                     }
                 })
                 .setNegativeBtnCallback("取消", new DialogBuilder.OnBtnClickListener() {
@@ -129,59 +127,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
                 }).setTitle("账号登录").setMessage("username or email").showDialog();
     }
 
-    private void githubLogin(String accountName, String password) {
-        showProgressDialog();
-        GithubApi.login(accountName, password, new IDataCallback<Authorization>() {
-            @Override
-            public void onSuccess(Authorization object, Headers headers) {
-                if (object != null&&!TextUtils.isEmpty(object.getToken())) {
-                    AccountManager.saveLoginToken(MainActivity.this, "token " + object.getToken());
-                    githubUserInfo();
-                }
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                showToastShort("登录失败" + code + message);
-            }
-        });
+    @Override
+    public void clearAvatar() {
+        ImageUitl.loadUriPic("", avatarView);
     }
 
-    private void githubUserInfo(){
-        GithubApi.user(new IDataCallback<UserInfo>() {
-            @Override
-            public void onSuccess(UserInfo object, Headers headers) {
-                hideProgressDialog();
-                if (object != null && !TextUtils.isEmpty(object.getAvatar_url())) {
-                    AccountManager.setUser(object);
-                    refreshUserInfo(object);
-                    showToastShort("登录成功");
-                }
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                showToastShort(code+message);
-                hideProgressDialog();
-            }
-        });
+    @Override
+    public void onGetMenuList(List<MenuItemModel> dataList) {
+        mAdapter.addListData(dataList);
+        mAdapter.notifyDataSetChanged();
     }
 
-    private void refreshUserInfo(UserInfo userInfo){
+    @Override
+    public void refreshUserInfo(UserInfo userInfo){
         ImageUitl.loadUriPic(userInfo.getAvatar_url(), avatarView);
         userNameTv.setText(userInfo.getName());
         userDescptionTv.setText(userInfo.getEmail());
-    }
-
-
-    private void loadMenuItem() {
-        String[] arrays = getResources().getStringArray(R.array.github_menu_navigation);
-        List<MenuItemModel> dataList = new ArrayList<>();
-        for (String menuItem:arrays){
-            dataList.add(new MenuItemModel(menuItem));
-        }
-        mAdapter.addListData(dataList);
-        mAdapter.notifyDataSetChanged();
     }
 
     private void initToolBar() {
@@ -205,6 +166,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
             }
         };
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+    }
+
+    private void initMenuHeader() {
+        menuHeader = View.inflate(this, R.layout.view_drawer_header, null);
+        menuHeader.setBackgroundColor(ContextCompat.getColor(this, R.color.cyan));
+        avatarView = (SimpleDraweeView) menuHeader.findViewById(R.id.user_avatar);
+        userNameTv = (TextView) menuHeader.findViewById(R.id.tv_user_name);
+        userDescptionTv = (TextView) menuHeader.findViewById(R.id.tv_user_description);
+        avatarView.setOnClickListener(this);
     }
 
     @Override

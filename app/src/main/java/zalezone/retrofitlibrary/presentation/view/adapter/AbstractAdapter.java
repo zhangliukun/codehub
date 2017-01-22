@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.view.adapter;
+package zalezone.retrofitlibrary.presentation.view.adapter;
 
 import android.content.Context;
 import android.os.Looper;

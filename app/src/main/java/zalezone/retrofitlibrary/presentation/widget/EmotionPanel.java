@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.view.customview;
+package zalezone.retrofitlibrary.presentation.widget;
 
 import android.app.Activity;
 import android.graphics.Rect;
