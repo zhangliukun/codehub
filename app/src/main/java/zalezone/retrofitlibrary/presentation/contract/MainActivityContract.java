@@ -16,8 +16,6 @@ public interface MainActivityContract {
     interface View extends BaseView{
         public void onGetMenuList(List<MenuItemModel> dataList);
         public void refreshUserInfo(UserInfo userInfo);
-        public void showLoginDialog();
-        public void showLogoutConfirmDialog();
         public void clearAvatar();
     }
 

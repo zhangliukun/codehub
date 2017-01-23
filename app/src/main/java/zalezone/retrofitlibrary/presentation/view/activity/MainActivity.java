@@ -9,10 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,13 +21,11 @@ import java.util.List;
 
 import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.common.base.BaseActivity;
-import zalezone.retrofitlibrary.manager.AccountManager;
 import zalezone.retrofitlibrary.model.MenuItemModel;
 import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.presentation.contract.MainActivityContract;
 import zalezone.retrofitlibrary.presentation.presenter.MainActivityPresenter;
 import zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl.MenuItemAdapter;
-import zalezone.retrofitlibrary.presentation.widget.dialog.DialogBuilder;
 import zalezone.retrofitlibrary.util.ImageUitl;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener,MainActivityContract.View{
@@ -97,46 +93,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     }
 
     @Override
-    public void showLogoutConfirmDialog() {
-        DialogBuilder builder = new DialogBuilder(this);
-        builder.setPositiveBtnCallback("确定", new DialogBuilder.OnBtnClickListener() {
-            @Override
-            public void exectute() {
-                AccountManager.loginOut(getViewContext());
-                clearAvatar();
-            }
-        }).setTitle("提醒").setMessage("确定要退出登录？").showDialog();
-    }
-
-    @Override
-    public void showLoginDialog() {
-        View loginView = View.inflate(this, R.layout.view_login_dialog, null);
-        final EditText accountEt = (EditText) loginView.findViewById(R.id.et_account);
-        final EditText passwordEt = (EditText) loginView.findViewById(R.id.et_password);
-        DialogBuilder builder = new DialogBuilder(this);
-        builder.setContentView(loginView)
-                .setPositiveBtnCallback("登录", new DialogBuilder.OnBtnClickListener() {
-                    @Override
-                    public void exectute() {
-                        String password = passwordEt.getText().toString();
-                        String account = accountEt.getText().toString();
-                        if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
-                            showToastShort("账号或密码不能为空！");
-                        }
-                        mPresenter.githubLogin(account,password);
-                    }
-                })
-                .setNegativeBtnCallback("取消", new DialogBuilder.OnBtnClickListener() {
-                    @Override
-                    public void exectute() {
-
-                    }
-                }).setTitle("账号登录").setMessage("username or email").showDialog();
-    }
-
-    @Override
     public void clearAvatar() {
         ImageUitl.loadUriPic("", avatarView);
+        userNameTv.setText("");
+        userDescptionTv.setText("");
     }
 
     @Override

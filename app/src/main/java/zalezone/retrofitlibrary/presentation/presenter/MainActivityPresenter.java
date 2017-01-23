@@ -2,6 +2,8 @@ package zalezone.retrofitlibrary.presentation.presenter;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import zalezone.retrofitlibrary.model.MenuItemModel;
 import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.network.IDataCallback;
 import zalezone.retrofitlibrary.presentation.contract.MainActivityContract;
+import zalezone.retrofitlibrary.presentation.widget.dialog.DialogBuilder;
 
 /**
  * Created by zale on 2017/1/22.
@@ -98,9 +101,45 @@ public class MainActivityPresenter implements MainActivityContract.Presenter{
     @Override
     public void LoginOrOut() {
         if (AccountManager.hasLogin(taskView.getViewContext())) {
-            taskView.showLogoutConfirmDialog();
+            showLogoutConfirmDialog();
         } else {
-            taskView.showLoginDialog();
+            showLoginDialog();
         }
+    }
+
+    private void showLoginDialog() {
+        View loginView = View.inflate(taskView.getViewContext(), R.layout.view_login_dialog, null);
+        final EditText accountEt = (EditText) loginView.findViewById(R.id.et_account);
+        final EditText passwordEt = (EditText) loginView.findViewById(R.id.et_password);
+        DialogBuilder builder = new DialogBuilder(taskView.getViewContext());
+        builder.setContentView(loginView)
+                .setPositiveBtnCallback("登录", new DialogBuilder.OnBtnClickListener() {
+                    @Override
+                    public void exectute() {
+                        String password = passwordEt.getText().toString();
+                        String account = accountEt.getText().toString();
+                        if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
+                            taskView.showToastShort("账号或密码不能为空！");
+                        }
+                        githubLogin(account,password);
+                    }
+                })
+                .setNegativeBtnCallback("取消", new DialogBuilder.OnBtnClickListener() {
+                    @Override
+                    public void exectute() {
+
+                    }
+                }).setTitle("账号登录").setMessage("username or email").showDialog();
+    }
+
+    public void showLogoutConfirmDialog() {
+        DialogBuilder builder = new DialogBuilder(taskView.getViewContext());
+        builder.setPositiveBtnCallback("确定", new DialogBuilder.OnBtnClickListener() {
+            @Override
+            public void exectute() {
+                AccountManager.loginOut(taskView.getViewContext());
+                taskView.clearAvatar();
+            }
+        }).setTitle("提醒").setMessage("确定要退出登录？").showDialog();
     }
 }

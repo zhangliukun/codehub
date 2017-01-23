@@ -20,7 +20,7 @@
         style="@style/BasicTextViewTheme"
         android:layout_below="@id/user_avatar"
         android:layout_marginTop="16dp"
-        android:text="account"
+        android:text=""
         android:layout_alignStart="@id/user_avatar"
         android:textStyle="bold"/>
 
@@ -28,7 +28,7 @@
         android:id="@+id/tv_user_description"
         style="@style/BasicTextViewTheme"
         android:layout_below="@id/tv_user_name"
-        android:text="email"
+        android:text=""
         android:layout_marginBottom="16dp"
         android:layout_alignStart="@id/user_avatar"
         android:textStyle="normal"/>
