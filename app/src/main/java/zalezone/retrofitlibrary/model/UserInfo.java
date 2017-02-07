@@ -4,7 +4,7 @@ package zalezone.retrofitlibrary.model;
  * Created by zale on 2017/1/9.
  */
 
-public class UserInfo {
+public class UserInfo extends GithubBaseModel{
 
     private String login;
     private long id;

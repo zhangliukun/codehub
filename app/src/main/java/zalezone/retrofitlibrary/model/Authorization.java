@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Created by zale on 2017/1/3.
  */
 
-public class Authorization {
+public class Authorization extends GithubBaseModel{
 
     private int id;
     private String url;
