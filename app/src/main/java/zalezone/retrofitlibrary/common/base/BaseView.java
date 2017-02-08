@@ -8,10 +8,6 @@ import android.content.Context;
 
 public interface BaseView{
 
-    void initView();
-    void loadData();
-    int getContainerLayoutId();
-
     void showOnLoading();
     void hideOnLoading();
 

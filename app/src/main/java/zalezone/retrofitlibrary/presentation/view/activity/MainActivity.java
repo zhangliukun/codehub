@@ -26,6 +26,7 @@ import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.presentation.contract.MainActivityContract;
 import zalezone.retrofitlibrary.presentation.presenter.MainActivityPresenter;
 import zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl.MenuItemAdapter;
+import zalezone.retrofitlibrary.presentation.view.fragment.UserInfoFragment;
 import zalezone.retrofitlibrary.util.ImageUitl;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener,MainActivityContract.View{
@@ -160,6 +161,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch ((int) id){
             case 0:
+                replaceLoadRootFragment(R.id.content_frame, UserInfoFragment.newInstance(),false);
                 break;
             default:
                 break;
