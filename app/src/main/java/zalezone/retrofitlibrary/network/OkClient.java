@@ -56,8 +56,8 @@ public class OkClient{
         }else {
             String responseStr = response.body().string();
             delivery.postSuccess(dataCallback,requestCallback.success(responseStr),response.headers());
-
         }
+        response.body().close();
     }
 
     //异步get

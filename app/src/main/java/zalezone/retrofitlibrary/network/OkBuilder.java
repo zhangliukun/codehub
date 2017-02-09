@@ -37,7 +37,7 @@ public class OkBuilder {
     }
 
     public static Request.Builder urlGet(String url, Map<String,String> params){
-        if (params !=null && params.isEmpty()){
+        if (params !=null && !params.isEmpty()){
             url = url + "?" + OkUtil.convertMap2SGetParams(params,false);
         }
         Request.Builder builder = new Request.Builder().url(url);

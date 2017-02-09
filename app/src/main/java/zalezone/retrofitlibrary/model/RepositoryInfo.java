@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by zale on 2017/1/23.
  */
 
-public class RepositoryInfo extends GithubBaseModel{
+public class RepositoryInfo{
 
     private long id;
     private String name;
