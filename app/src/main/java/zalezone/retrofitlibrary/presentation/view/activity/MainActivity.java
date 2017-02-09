@@ -26,7 +26,8 @@ import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.presentation.contract.MainActivityContract;
 import zalezone.retrofitlibrary.presentation.presenter.MainActivityPresenter;
 import zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl.MenuItemAdapter;
-import zalezone.retrofitlibrary.presentation.view.fragment.UserInfoFragment;
+import zalezone.retrofitlibrary.presentation.widget.ZBottomNavigation;
+import zalezone.retrofitlibrary.presentation.widget.ZBottomNavigationItem;
 import zalezone.retrofitlibrary.util.ImageUitl;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener,MainActivityContract.View{
@@ -36,6 +37,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     private Toolbar toolbar;
     private MenuItemAdapter mAdapter;
     private ListView mDrawerList;
+    private ZBottomNavigation zBottomNavigation;
 
     private View menuHeader;
     private SimpleDraweeView avatarView;
@@ -63,6 +65,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
         mDrawerList.addHeaderView(menuHeader);
         mDrawerList.setAdapter(mAdapter);
         mDrawerList.setOnItemClickListener(this);
+        zBottomNavigation = (ZBottomNavigation) findViewById(R.id.nav_bar);
+        initBottomBar();
+    }
+
+    private void initBottomBar() {
+        ZBottomNavigationItem item1 = new ZBottomNavigationItem("Item1",R.drawable.ic_home_black_18dp,R.color.blue);
+        ZBottomNavigationItem item2 = new ZBottomNavigationItem("Item2",R.drawable.ic_home_black_18dp,R.color.green);
+        ZBottomNavigationItem item3 = new ZBottomNavigationItem("Item3",R.drawable.ic_home_black_18dp,R.color.cyan);
+        ZBottomNavigationItem item4 = new ZBottomNavigationItem("Item4",R.drawable.ic_home_black_18dp,R.color.colorAccent);
+        zBottomNavigation.addItem(item1);
+        zBottomNavigation.addItem(item2);
+        zBottomNavigation.addItem(item3);
+        zBottomNavigation.addItem(item4);
+        zBottomNavigation.setColored(true);
+        zBottomNavigation.setForceTitlesDisplay(true);
+        zBottomNavigation.setOnTabSelectedListener(new ZBottomNavigation.OnTabSelectedListener() {
+            @Override
+            public boolean onTabSelected(int position, boolean wasSelected) {
+                return true;
+            }
+        });
 
     }
 
@@ -161,7 +184,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch ((int) id){
             case 0:
-                replaceLoadRootFragment(R.id.content_frame, UserInfoFragment.newInstance(),false);
+                //replaceLoadRootFragment(R.id.content_frame, UserInfoFragment.newInstance(),false);
                 break;
             default:
                 break;
