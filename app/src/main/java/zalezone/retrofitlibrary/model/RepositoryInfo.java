@@ -8,27 +8,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class RepositoryInfo{
 
-    private long id;
-    private String name;
+    public long id;
+    public String name;
     @SerializedName("full_name")
-    private String fullName;
-    private OwnerModel owner;
+    public String fullName;
+    public OwnerModel owner;
     @SerializedName("private")
-    private boolean isPrivate;
-    private String url;
-    private String description;
-    private boolean fork;
+    public boolean isPrivate;
+    public String url;
+    public String description;
+    public boolean fork;
     @SerializedName("stargazers_count")
-    private int starsCount;
+    public int starsCount;
     @SerializedName("watchers_count")
-    private int watchersCount;
+    public int watchersCount;
     @SerializedName("open_issues")
-    private int openIssues;
-    private String language;
+    public int openIssues;
+    public String language;
     @SerializedName("created_at")
-    private String createdAt;
+    public String createdAt;
     @SerializedName("updated_at")
-    private String updatedAt;
+    public String updatedAt;
 
 //    {
 //        "id":18905701,
