@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout android:id="@+id/bottom_navigation_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottom_navigation_height"
     android:background="?selectableItemBackgroundBorderless"
     android:minWidth="@dimen/bottom_navigation_min_width"
-    android:paddingLeft="@dimen/bottom_navigation_padding_left"
-    android:paddingRight="@dimen/bottom_navigation_padding_right">
+    android:paddingStart="@dimen/bottom_navigation_padding_left"
+    android:paddingEnd="@dimen/bottom_navigation_padding_right">
 
     <ImageView
         android:id="@+id/bottom_navigation_item_icon"
@@ -29,7 +28,7 @@
         android:lines="1"
         android:textColor="@color/colorBottomNavigationInactive"
         android:textSize="@dimen/bottom_navigation_text_size_inactive"
-        tools:text="Label One" />
+        android:text="Label One" />
 
     <TextView
         android:id="@+id/bottom_navigation_notification"

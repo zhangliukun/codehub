@@ -172,13 +172,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+        if (mDrawerToggle!=null){
+            mDrawerToggle.syncState();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mDrawerToggle!=null){
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     @Override

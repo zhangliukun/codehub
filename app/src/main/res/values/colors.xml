@@ -11,4 +11,14 @@
     <color name="grey">#9E9E9E</color>
     <color name="gray">#9E9E9E</color>
     <color name="transparent">#00000000</color>
+
+    <!--for bottom navigation-->
+    <color name="colorBottomNavigationAccent">#FF4081</color>
+    <color name="colorBottomNavigationActiveColored">#FFFFFF</color>
+    <color name="colorBottomNavigationInactive">#747474</color>
+    <color name="colorBottomNavigationInactiveColored">#50FFFFFF</color>
+    <color name="colorBottomNavigationNotification">#F63D2B</color>
+    <color name="colorBottomNavigationPrimary">#3F51B5</color>
+    <color name="colorBottomNavigationPrimaryDark">#303F9F</color>
+
 </resources>
