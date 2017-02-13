@@ -26,6 +26,18 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
     public abstract void bindDataToItemView(VH vh, T item);
 
     /**
+     * add for multiItemType
+     * @param <T>
+     */
+    public interface MultiItemType<T>{
+        int getLayoutId(int itemType);
+
+        int getItemViewType(int position,T t);
+    }
+
+    public abstract int getAdapterLayout();
+
+    /**
      * 这里直接使用RecyclerViewHolder，子类也直接使用这个ViewHolder，如果子类要自定义ViewHolder，这里的方法需要延迟到子类去加载。
      * @param v
      * @return
@@ -33,8 +45,6 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
     public VH createViewHolder(View v){
         return (VH) new RecyclerViewHolder(v);
     }
-
-    public abstract int getAdapterLayout();
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,7 +71,11 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
 
     @Override
     public int getItemViewType(int position) {
-        return multiItemType.getItemViewType(position,mData.get(position));
+        if (multiItemType!=null){
+            return multiItemType.getItemViewType(position,mData.get(position));
+        }else {
+            return super.getItemViewType(position);
+        }
     }
 
     public T getItem(int position){
@@ -106,14 +120,6 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
         }
     }
 
-    /**
-     * add for multiItemType
-     * @param <T>
-     */
-    public interface MultiItemType<T>{
-        int getLayoutId(int itemType);
 
-        int getItemViewType(int position,T t);
-    }
 
 }

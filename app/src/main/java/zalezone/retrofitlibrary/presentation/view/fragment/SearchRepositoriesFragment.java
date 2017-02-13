@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
+import zalezone.pullrefresh.PtrClassicFrameLayout;
+import zalezone.pullrefresh.PtrDefaultHandler;
+import zalezone.pullrefresh.PtrFrameLayout;
 import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.common.base.BaseFragment;
 import zalezone.retrofitlibrary.githubapi.GithubApi;
@@ -29,7 +32,7 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
     SearchView searchView;
     RecyclerView recyclerView;
     Button searchBtn;
-
+    PtrClassicFrameLayout ptrFrameLayout;
     RepositoriesAdapter mAdapter;
 
     public static SearchRepositoriesFragment newInstance(){
@@ -47,6 +50,21 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
 //        recyclerView.setHasFixedSize(true);
         mAdapter = new RepositoriesAdapter(new ArrayList<RepositoryInfo>());
         recyclerView.setAdapter(mAdapter);
+
+//        MaterialHeader header = new MaterialHeader(mActivity);
+
+        ptrFrameLayout = (PtrClassicFrameLayout) findViewById(R.id.ptr_container);
+        ptrFrameLayout.setPtrHandler(new PtrDefaultHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ptrFrameLayout.refreshComplete();
+                    }
+                },2000);
+            }
+        });
     }
 
     @Override

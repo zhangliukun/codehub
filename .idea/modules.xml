@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RetrofitLibrary.iml" filepath="$PROJECT_DIR$/RetrofitLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pullrefresh/pullrefresh.iml" filepath="$PROJECT_DIR$/pullrefresh/pullrefresh.iml" />
     </modules>
   </component>
 </project>
