@@ -5,9 +5,9 @@ package zalezone.retrofitlibrary.model;
  */
 
 public class OwnerModel extends GithubBaseModel{
-    private String login;
-    private long id;
-    private String avatar_url;
-    private String html_url;
-    private String type;
+    public String login;
+    public long id;
+    public String avatar_url;
+    public String html_url;
+    public String type;
 }

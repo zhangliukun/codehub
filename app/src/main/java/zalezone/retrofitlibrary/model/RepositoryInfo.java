@@ -24,6 +24,8 @@ public class RepositoryInfo{
     public int watchersCount;
     @SerializedName("open_issues")
     public int openIssues;
+    @SerializedName("forks_count")
+    public int forksCount;
     public String language;
     @SerializedName("created_at")
     public String createdAt;

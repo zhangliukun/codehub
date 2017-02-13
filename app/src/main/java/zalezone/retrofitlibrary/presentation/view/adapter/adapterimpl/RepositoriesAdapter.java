@@ -1,12 +1,16 @@
 package zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl;
 
+import android.text.TextUtils;
 import android.widget.TextView;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
 import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.model.RepositoryInfo;
 import zalezone.retrofitlibrary.presentation.view.adapter.BaseRecyclerViewAdapter;
+import zalezone.retrofitlibrary.util.ImageUitl;
 
 /**
  * Created by zale on 2017/2/9.
@@ -59,7 +63,13 @@ public class RepositoriesAdapter extends BaseRecyclerViewAdapter<RepositoryInfo,
 
     @Override
     public void bindDataToItemView(RecyclerViewHolder recyclerViewHolder, RepositoryInfo repositoryInfo) {
-        ((TextView)recyclerViewHolder.getView(R.id.repository_name)).setText(repositoryInfo.name+"");
+        ((TextView)recyclerViewHolder.getView(R.id.repository_name)).setText(TextUtils.isEmpty(repositoryInfo.fullName)?"":repositoryInfo.fullName);
+        ((TextView)recyclerViewHolder.getView(R.id.language_type)).setText(TextUtils.isEmpty(repositoryInfo.language)?"":repositoryInfo.language);
+        ((TextView)recyclerViewHolder.getView(R.id.repository_desc)).setText(TextUtils.isEmpty(repositoryInfo.description)?"":repositoryInfo.description);
+        ((TextView)recyclerViewHolder.getView(R.id.stars_tv)).setText(repositoryInfo.starsCount+"");
+        ((TextView)recyclerViewHolder.getView(R.id.forks_tv)).setText(repositoryInfo.forksCount+"");
+        ((TextView)recyclerViewHolder.getView(R.id.update_time)).setText("Updated on "+repositoryInfo.updatedAt.substring(0,10)+"");
+        ImageUitl.loadUriPic(repositoryInfo.owner.avatar_url, (SimpleDraweeView) recyclerViewHolder.getView(R.id.repository_owner_im));
     }
 
     @Override

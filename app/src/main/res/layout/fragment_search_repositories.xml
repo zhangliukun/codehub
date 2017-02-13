@@ -6,7 +6,7 @@
         android:id="@+id/search_repository"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/search_btn">
+        android:layout_toLeftOf="@+id/search_btn">
     </SearchView>
 
     <Button
@@ -21,6 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/search_repository"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="70dp"/>
 
 </RelativeLayout>

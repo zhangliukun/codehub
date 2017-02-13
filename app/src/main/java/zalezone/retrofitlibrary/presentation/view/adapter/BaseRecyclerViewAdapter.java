@@ -2,6 +2,7 @@ package zalezone.retrofitlibrary.presentation.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,13 +15,15 @@ import java.util.List;
 
 public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapter.RecyclerViewHolder> extends RecyclerView.Adapter<VH>{
 
+    MultiItemType<T> multiItemType;
+
     private List<T> mData;
 
     public BaseRecyclerViewAdapter(List<T> mData) {
         this.mData = mData;
     }
 
-    public abstract void bindDataToItemView(VH vh,T item);
+    public abstract void bindDataToItemView(VH vh, T item);
 
     /**
      * 这里直接使用RecyclerViewHolder，子类也直接使用这个ViewHolder，如果子类要自定义ViewHolder，这里的方法需要延迟到子类去加载。
@@ -35,7 +38,13 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = View.inflate(parent.getContext(), getAdapterLayout(),null);
+//        View v = View.inflate(parent.getContext(), getAdapterLayout(),null);
+        //fix do supply the parent
+        int layoutId = getAdapterLayout();
+        if (multiItemType!=null){
+            layoutId = multiItemType.getLayoutId(viewType);
+        }
+        View v = LayoutInflater.from(parent.getContext()).inflate(layoutId,parent,false);
         return createViewHolder(v);
     }
 
@@ -48,6 +57,11 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return multiItemType.getItemViewType(position,mData.get(position));
     }
 
     public T getItem(int position){
@@ -90,6 +104,16 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
             }
             return (T) view;
         }
+    }
+
+    /**
+     * add for multiItemType
+     * @param <T>
+     */
+    public interface MultiItemType<T>{
+        int getLayoutId(int itemType);
+
+        int getItemViewType(int position,T t);
     }
 
 }

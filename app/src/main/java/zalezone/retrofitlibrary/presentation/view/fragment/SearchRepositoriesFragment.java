@@ -1,6 +1,7 @@
 package zalezone.retrofitlibrary.presentation.view.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -42,6 +43,8 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
         searchBtn.setOnClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recycleview);
         recyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.setHasFixedSize(true);
         mAdapter = new RepositoriesAdapter(new ArrayList<RepositoryInfo>());
         recyclerView.setAdapter(mAdapter);
     }
