@@ -5,7 +5,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,13 +33,13 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
 
     public final static int PER_PAGE_SIZE =20;
 
-    MultiItemType<T> multiItemType;
+    protected MultiItemType<T> multiItemType;
 
-    OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
 
-    ILoadMore loadMoreFooterView;
+    protected ILoadMore loadMoreFooterView;
 
-    RecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
 
     private List<T> mData;
     private Context mContext;
@@ -150,14 +149,9 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
                     mOnItemClickListener.onItemClick(v,position,getRealDataPosition(position));
-                    debugHeaderFooterView();
                 }
             });
         }
-    }
-
-    private void debugHeaderFooterView(){
-        Log.i(TAG,mHeaderViews.toString()+mFooterViews.toString());
     }
 
     @Override
@@ -180,31 +174,25 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
     }
 
     public void addListData(List<T> data){
-        if(mData==null){
-            mData = data;
-        }else{
-            mData.addAll(data);
-        }
-        notifyDataSetChanged();
+        addListData(data,-1);
     }
 
+    /**
+     *
+     * @param data
+     * @param currentPage 为1的话刷新加载更多的状态，否则的话不管
+     */
     public void addListData(List<T> data,int currentPage){
-        if (currentPage == 1){
-            replaceListData(data);
-        }else {
-            addListData(data);
-        }
-        if (loadMoreFooterView!=null){
-            loadMoreFooterView.setState(data.size(),currentPage);
-        }
-    }
-
-    public void replaceListData(List<T> data){
         if (mData == null){
             mData = data;
         }else {
-            mData.clear();
+            if (currentPage == 1){
+                mData.clear();
+            }
             mData.addAll(data);
+        }
+        if (loadMoreFooterView!=null){
+            loadMoreFooterView.setState(data.size(),currentPage);
         }
         notifyDataSetChanged();
     }
@@ -213,6 +201,15 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
         if (loadMoreFooterView!=null){
             loadMoreFooterView.setLoadingError();
         }
+    }
+
+
+    /**
+     * 是否禁用加载更多
+     * @param enable
+     */
+    public void enableLoadMoreView(boolean enable){
+        loadMoreFooterView.isEnable = enable;
     }
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
@@ -292,6 +289,9 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
+                    if (!loadMoreFooterView.isEnable){
+                        return;
+                    }
                     int lastPosition = -1;
                     if (newState == RecyclerView.SCROLL_STATE_IDLE){
                         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();

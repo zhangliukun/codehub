@@ -15,6 +15,8 @@ public abstract class ILoadMore {
     public int currentTotal = 0;
     public int currentPage = 1;
 
+    public boolean isEnable = true;
+
 
     public abstract View getContainerView();
     protected abstract void setNoMoreDataView();
@@ -25,15 +27,13 @@ public abstract class ILoadMore {
 
     public void setState(int newDataSize,int currentPage){
 
+        if (!checkIsEnable()){
+            return;
+        }
         if (currentPage == 1){
             resetState();
             isNoMoreData(newDataSize);
-        }else if (currentPage >1){
-            if (newDataSize < BaseRecyclerViewAdapter.PER_PAGE_SIZE){
-                hasMoreData = false;
-                loading = false;
-                setNoMoreDataView();
-            }
+        }else{
             if (isNoMoreData(newDataSize)){
             } else {
                 hasMoreData = true;
@@ -42,6 +42,52 @@ public abstract class ILoadMore {
                 hideLoadMoreView();
             }
         }
+    }
+
+    public boolean isNeedLoadMore(int lastPosition,int currentTotal){
+
+        if (!checkIsEnable()){
+            return false;
+        }
+
+        this.currentTotal = currentTotal;
+        if (lastPosition == currentTotal-1 && hasMoreData){
+            if (!loading){
+                currentPage++;
+                showLoadMoreView();
+                loading = true;
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public void setLoadingError(){
+        if (!checkIsEnable()){
+            return;
+        }
+        currentPage--;
+        loading = false;
+        setLoadMoreErrorView();
+    }
+
+    private boolean checkIsEnable(){
+        if (!isEnable){
+            hideLoadMoreView();
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    private void resetState(){
+        loading = false;
+        currentTotal = 0;
+        currentPage = 1;
+        hasMoreData = true;
+        hideLoadMoreView();
+        setHasMoreDataView();
     }
 
     private boolean isNoMoreData(int newDataSize){
@@ -57,34 +103,5 @@ public abstract class ILoadMore {
             return true;
         }
         return false;
-    }
-
-    public boolean isNeedLoadMore(int lastPosition,int currentTotal){
-        this.currentTotal = currentTotal;
-        if (lastPosition == currentTotal-1 && hasMoreData){
-            if (!loading){
-                currentPage++;
-                showLoadMoreView();
-                loading = true;
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    public void setLoadingError(){
-        currentPage--;
-        loading = false;
-        setLoadMoreErrorView();
-    }
-
-    public void resetState(){
-        loading = false;
-        currentTotal = 0;
-        currentPage = 1;
-        hasMoreData = true;
-        hideLoadMoreView();
-        setHasMoreDataView();
     }
 }
