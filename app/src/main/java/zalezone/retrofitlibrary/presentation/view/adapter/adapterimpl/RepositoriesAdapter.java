@@ -1,5 +1,6 @@
 package zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl;
 
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -7,9 +8,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
+import zalezone.pullrefresh.content.BaseRecyclerViewAdapter;
 import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.model.RepositoryInfo;
-import zalezone.retrofitlibrary.presentation.view.adapter.BaseRecyclerViewAdapter;
 import zalezone.retrofitlibrary.util.ImageUitl;
 
 /**
@@ -57,8 +58,8 @@ import zalezone.retrofitlibrary.util.ImageUitl;
 public class RepositoriesAdapter extends BaseRecyclerViewAdapter<RepositoryInfo,BaseRecyclerViewAdapter.RecyclerViewHolder> {
 
 
-    public RepositoriesAdapter(List<RepositoryInfo> mData) {
-        super(mData);
+    public RepositoriesAdapter(RecyclerView recyclerView, List<RepositoryInfo> mData) {
+        super(recyclerView,mData);
     }
 
     @Override

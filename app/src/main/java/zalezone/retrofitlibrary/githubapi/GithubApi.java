@@ -1,18 +1,16 @@
 package zalezone.retrofitlibrary.githubapi;
 
-import android.util.ArrayMap;
-
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
+import zalezone.pullrefresh.content.BaseRecyclerViewAdapter;
 import zalezone.retrofitlibrary.common.config.GithubConfig;
 import zalezone.retrofitlibrary.model.Authorization;
 import zalezone.retrofitlibrary.model.CreateAuthorization;
 import zalezone.retrofitlibrary.model.ReponseRepositories;
-import zalezone.retrofitlibrary.model.RepositoryInfo;
 import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.network.IDataCallback;
 import zalezone.retrofitlibrary.network.IRequestCallback;
@@ -94,20 +92,20 @@ public class GithubApi {
      * @param order 排序顺序，升或降。值可取asc或desc。
      * @param dataCallback
      */
-    public static void searchRepositiories(String q,String sort,String order, IDataCallback<List<RepositoryInfo>> dataCallback){
-        Map<String,String> params = new ArrayMap<>();
+    public static void searchRepositiories(String q,String sort,String order,int page,IDataCallback<ReponseRepositories> dataCallback){
+        Map<String,String> params = new HashMap<>();
         params.put("q",q);
         params.put("sort",sort);
         params.put("order",order);
-        params.put("page","1");
-        params.put("per_page","20");
+        params.put("page", String.valueOf(page));
+        params.put("per_page", String.valueOf(BaseRecyclerViewAdapter.PER_PAGE_SIZE));
         String url = "https://api.github.com/search/repositories";
-        OkClient.httpGetRequest(url, params, dataCallback, new IRequestCallback<List<RepositoryInfo>>() {
+        OkClient.httpGetRequest(url, params, dataCallback, new IRequestCallback<ReponseRepositories>() {
             @Override
-            public List<RepositoryInfo> success(String content) {
+            public ReponseRepositories success(String content) {
                 ReponseRepositories reponseRepositories = new Gson().fromJson(content,ReponseRepositories.class);
                 if (reponseRepositories!=null){
-                    return reponseRepositories.getRepositoryList();
+                    return reponseRepositories;
                 }
                 return null;
             }
