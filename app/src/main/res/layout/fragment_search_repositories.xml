@@ -8,14 +8,7 @@
         android:id="@+id/search_repository"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/search_btn"></SearchView>
-
-    <Button
-        android:id="@+id/search_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="search" />
+        android:queryHint="enter repository name"/>
 
     <zalezone.pullrefresh.PtrClassicFrameLayout
         android:id="@+id/ptr_container"

@@ -126,7 +126,11 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
     }
 
     private int getRealDataPosition(int mixedPosition){
-        return mixedPosition-mHeaderViews.size();
+        int realPosition = mixedPosition - mHeaderViews.size();
+        if (realPosition>=mData.size()){
+            realPosition = -(realPosition +1 -mData.size());
+        }
+        return realPosition;
     }
 
     private boolean isHeader(int position) {
@@ -197,8 +201,8 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
         notifyDataSetChanged();
     }
 
-    public void loadMoreError(){
-        if (loadMoreFooterView!=null){
+    public void loadMoreError(int currentPage){
+        if (loadMoreFooterView!=null&&currentPage!=1){
             loadMoreFooterView.setLoadingError();
         }
     }

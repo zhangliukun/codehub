@@ -90,7 +90,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter{
 
     @Override
     public void checkLogin() {
-            AccountManager.getUserFromSp(taskView.getViewContext());
+        AccountManager.getUserFromSp(taskView.getViewContext());
         if (AccountManager.hasLogin(taskView.getViewContext())){
             taskView.refreshUserInfo(AccountManager.getUser());
         }else {

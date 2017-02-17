@@ -21,7 +21,7 @@
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/repository_owner_im"
             android:layout_width="36dp"
-            android:layout_height="36dp" />
+            android:layout_height="36dp"/>
 
         <TextView
             android:id="@+id/repository_name"

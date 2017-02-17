@@ -62,7 +62,7 @@ public class ZBottomNavigationItem {
      * Constructor
      *
      * @param titleRes    String resource
-     * @param drawableRes Drawable resource
+     * @param drawableRes Drawable resource      //best for vectorDrawable that won't show the file not found error
      * @param colorRes    Color resource
      */
     public ZBottomNavigationItem(@StringRes int titleRes, @DrawableRes int drawableRes, @ColorRes int colorRes) {

@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -21,12 +22,14 @@ import java.util.List;
 
 import zalezone.retrofitlibrary.R;
 import zalezone.retrofitlibrary.common.base.BaseActivity;
+import zalezone.retrofitlibrary.common.base.BaseFragment;
 import zalezone.retrofitlibrary.model.MenuItemModel;
 import zalezone.retrofitlibrary.model.UserInfo;
 import zalezone.retrofitlibrary.presentation.contract.MainActivityContract;
 import zalezone.retrofitlibrary.presentation.presenter.MainActivityPresenter;
 import zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl.MenuItemAdapter;
 import zalezone.retrofitlibrary.presentation.view.fragment.SearchRepositoriesFragment;
+import zalezone.retrofitlibrary.presentation.view.fragment.UserInfoFragment;
 import zalezone.retrofitlibrary.presentation.widget.ZBottomNavigation;
 import zalezone.retrofitlibrary.presentation.widget.ZBottomNavigationItem;
 import zalezone.retrofitlibrary.util.ImageUitl;
@@ -70,11 +73,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
         initBottomBar();
     }
 
+    private SparseArray<BaseFragment> mainTabFragments = new SparseArray<>();
+
     private void initBottomBar() {
-        ZBottomNavigationItem item1 = new ZBottomNavigationItem("Item1",R.drawable.ic_home_black_18dp,R.color.blue);
-        ZBottomNavigationItem item2 = new ZBottomNavigationItem("Item2",R.drawable.ic_home_black_18dp,R.color.green);
-        ZBottomNavigationItem item3 = new ZBottomNavigationItem("Item3",R.drawable.ic_home_black_18dp,R.color.cyan);
-        ZBottomNavigationItem item4 = new ZBottomNavigationItem("Item4",R.drawable.ic_home_black_18dp,R.color.colorAccent);
+        ZBottomNavigationItem item1 = new ZBottomNavigationItem("Search",R.drawable.vector_ic_search_black_24dp,R.color.blue);
+        ZBottomNavigationItem item2 = new ZBottomNavigationItem("Personal",R.drawable.vector_ic_person_black_24dp,R.color.green);
+        ZBottomNavigationItem item3 = new ZBottomNavigationItem("Item3",R.drawable.vector_ic_add_circle_black_24dp,R.color.cyan);
+        ZBottomNavigationItem item4 = new ZBottomNavigationItem("Item4",R.drawable.vector_ic_add_circle_black_24dp,R.color.colorAccent);
         zBottomNavigation.addItem(item1);
         zBottomNavigation.addItem(item2);
         zBottomNavigation.addItem(item3);
@@ -84,9 +89,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
         zBottomNavigation.setOnTabSelectedListener(new ZBottomNavigation.OnTabSelectedListener() {
             @Override
             public boolean onTabSelected(int position, boolean wasSelected) {
+                switch (position){
+                    case 0:
+                        if (mainTabFragments.get(0) == null){
+                            mainTabFragments.put(0,SearchRepositoriesFragment.newInstance());
+                            loadRootFragment(R.id.content_frame, mainTabFragments.get(0),false);
+                        }
+                        break;
+                    case 1:
+                        if (mainTabFragments.get(1) == null){
+                            mainTabFragments.put(1,UserInfoFragment.newInstance());
+                            loadRootFragment(R.id.content_frame, mainTabFragments.get(1),false);
+                        }
+                        break;
+                }
+                selectTabShowFragment(position);
                 return true;
             }
         });
+        zBottomNavigation.setCurrentItem(0);
+    }
+
+    private void selectTabShowFragment(int position){
+        for (int i=0;i<mainTabFragments.size();i++){
+            int key=mainTabFragments.keyAt(i);
+            if (position == key){
+                mainTabFragments.get(key).showFragment();
+            }else {
+                mainTabFragments.get(key).hideFragment();
+            }
+        }
 
     }
 
@@ -189,8 +221,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch ((int) id){
             case 0:
-                replaceLoadRootFragment(R.id.content_frame, SearchRepositoriesFragment.newInstance(),false);
-                //replaceLoadRootFragment(R.id.content_frame, UserInfoFragment.newInstance(),false);
                 break;
             default:
                 break;

@@ -2,8 +2,8 @@ package zalezone.retrofitlibrary.common.base;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Build;
@@ -38,7 +38,6 @@ public abstract class BaseFragment extends Fragment{
     private View mContainerView;
 
     protected BaseActivity mActivity;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -142,8 +141,8 @@ public abstract class BaseFragment extends Fragment{
         return mContainerId;
     }
 
-    public void loadRootFragment(int containerId,BaseFragment toFragment){
-        mFragmentMaster.loadRootTransaction(getChildFragmentManager(),containerId,toFragment);
+    public void loadRootFragment(int containerId,BaseFragment toFragment,boolean addToBack){
+        mFragmentMaster.loadRootTransaction(getChildFragmentManager(),containerId,toFragment,addToBack);
     }
 
     public void replaceLoadRootFragment(int containerId,BaseFragment toFragment,boolean addToBack){
@@ -157,6 +156,18 @@ public abstract class BaseFragment extends Fragment{
     //replace事务, 主要用于子Fragment之间的replace
     public void replaceFragment(BaseFragment toFragment,boolean addToBack){
         mFragmentMaster.replaceTransaction(this.getFragmentManager(),this.getContainerId(),toFragment,addToBack);
+    }
+
+    public void hideFragment(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.hide(this);
+        ft.commitAllowingStateLoss();
+    }
+
+    public void showFragment(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.show(this);
+        ft.commitAllowingStateLoss();
     }
 
     public void showToastShort(String text) {

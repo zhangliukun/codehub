@@ -1,10 +1,11 @@
 package zalezone.retrofitlibrary.manager;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -30,9 +31,13 @@ public class FragmentMaster {
         this.mActivity = mActivity;
     }
 
-    public void loadRootTransaction(FragmentManager fragmentManager, int containerId, BaseFragment to){
+    public void loadRootTransaction(FragmentManager fragmentManager, int containerId, BaseFragment to,boolean addToBack){
         bindContainerId(containerId,to);
-        start(fragmentManager,null,to,to.getClass().getName());
+        if (addToBack){
+            start(fragmentManager,null,to,to.getClass().getName());
+        }else {
+            start(fragmentManager,null,to,"false");
+        }
     }
 
     public void replaceLoadRootTransaction(FragmentManager fragmentManager,int containerId,BaseFragment to,boolean addToBack){
@@ -53,7 +58,9 @@ public class FragmentMaster {
                 ft.hide(from);
             }
         }
-        ft.addToBackStack(toFragmentTag);
+        if (TextUtils.isEmpty(toFragmentTag)||!toFragmentTag.equals("false")){
+            ft.addToBackStack(toFragmentTag);
+        }
         ft.commitAllowingStateLoss();
     }
 

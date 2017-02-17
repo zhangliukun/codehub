@@ -1,12 +1,12 @@
 package zalezone.retrofitlibrary.presentation.view.fragment;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
@@ -32,11 +32,10 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
 
     SearchView searchView;
     RecyclerView recyclerView;
-    Button searchBtn;
     PtrClassicFrameLayout ptrFrameLayout;
     RepositoriesAdapter mAdapter;
 
-    private CharSequence query;
+    private String mQuery;
 
     public static SearchRepositoriesFragment newInstance(){
         return new SearchRepositoriesFragment();
@@ -45,8 +44,24 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
     @Override
     protected void initView(Bundle savedInstanceState) {
         searchView = (SearchView) findViewById(R.id.search_repository);
-        searchBtn = (Button) findViewById(R.id.search_btn);
-        searchBtn.setOnClickListener(this);
+        searchView.setSubmitButtonEnabled(true);
+        searchView.onActionViewExpanded();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mQuery = query;
+                if (TextUtils.isEmpty(mQuery)){
+                    mQuery = "zhangliukun";
+                }
+                searchRepository(1);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         ptrFrameLayout = (PtrClassicFrameLayout) findViewById(R.id.ptr_container);
         ptrFrameLayout.setPtrHandler(new PtrDefaultHandler() {
@@ -77,6 +92,16 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
             @Override
             public void onItemClick(View view, int position,long id) {
                 showToastShort("你点击的是第"+position+"个位置"+" id="+id);
+                if (id>=0){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("int", position);
+                    bundle.putString(RepositoryInfoFragment.IMAGE_URL_EXTRA,mAdapter.getItem((int) id).owner.avatar_url);
+                    View avatat = view.findViewById(R.id.repository_owner_im);
+                    ViewCompat.setTransitionName(avatat,position+"");
+                    getFragmentManager().beginTransaction().
+                            addSharedElement(avatat,position+"").
+                            add(getContainerId(),RepositoryInfoFragment.newInstance(bundle)).addToBackStack(null).commitAllowingStateLoss();
+                }
             }
         });
 
@@ -94,19 +119,10 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.search_btn:
-                query =  searchView.getQuery();
-                if (TextUtils.isEmpty(query)){
-                    query = "zhangliukun";
-                }
-                searchRepository(1);
-                break;
-        }
     }
 
     private void searchRepository(final int currentPage){
-        GithubApi.searchRepositiories(query.toString(), "stars", "desc",currentPage,new IDataCallback<ReponseRepositories>() {
+        GithubApi.searchRepositiories(mQuery, "stars", "desc",currentPage,new IDataCallback<ReponseRepositories>() {
             @Override
             public void onSuccess(ReponseRepositories object, Headers headers) {
                 if (object!=null&&object.getRepositoryList()!=null){
@@ -116,7 +132,7 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
 
             @Override
             public void onError(int code, String message) {
-                mAdapter.loadMoreError();
+                mAdapter.loadMoreError(currentPage);
                 showToastShort(code+message);
             }
         });

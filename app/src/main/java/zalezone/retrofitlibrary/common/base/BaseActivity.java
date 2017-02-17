@@ -48,16 +48,31 @@ public abstract class BaseActivity extends AppCompatActivity{
         return mFragmentMaster;
     }
 
+    /**
+     * 针对与分类也tab切换
+     * @param containerId
+     * @param toFragment
+     * @param addToBack
+     */
+    public void loadRootFragment(int containerId,BaseFragment toFragment,boolean addToBack){
+        mFragmentMaster.loadRootTransaction(getSupportFragmentManager(),containerId,toFragment,addToBack);
+    }
+
+    /**
+     * 针对没有同层布局的页面
+     * @param containerId
+     * @param toFragment
+     */
     public void loadRootFragment(int containerId,BaseFragment toFragment){
-        mFragmentMaster.loadRootTransaction(getFragmentManager(),containerId,toFragment);
+        mFragmentMaster.loadRootTransaction(getSupportFragmentManager(),containerId,toFragment,true);
     }
 
     public void replaceLoadRootFragment(int containerId,BaseFragment toFragment,boolean addToBack){
-        mFragmentMaster.replaceLoadRootTransaction(getFragmentManager(),containerId,toFragment,addToBack);
+        mFragmentMaster.replaceLoadRootTransaction(getSupportFragmentManager(),containerId,toFragment,addToBack);
     }
 
     public void start(BaseFragment toFragment){
-        mFragmentMaster.start(getFragmentManager(),null,toFragment,toFragment.getClass().getName());
+        mFragmentMaster.start(getSupportFragmentManager(),null,toFragment,toFragment.getClass().getName());
     }
 
     public void showToastShort(String text) {
