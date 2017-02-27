@@ -89,6 +89,12 @@ public abstract class BaseFragment extends Fragment{
         return view;
     }
 
+    public void addView(View view){
+        if (mContainerView!=null && mContainerView instanceof ViewGroup){
+            ((ViewGroup) mContainerView).addView(view);
+        }
+    }
+
 
     /**
      * 在该方法中初始化UI

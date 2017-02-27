@@ -18,6 +18,14 @@ public class ImageUitl {
         }
     }
 
+//    public static void loadUrlPic(String url, ImageView imageView){
+//        if (imageView!=null){
+//            imageView.setImage
+//            imageView.setImageURI(url);
+//        }
+//
+//    }
+
 
     /**
      * 加载本地图片（drawable图片）

@@ -1,59 +1,107 @@
 package zalezone.pullrefresh.footer;
 
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import zalezone.pullrefresh.R;
+import zalezone.pullrefresh.content.BaseRecyclerViewAdapter;
 
 /**
- * Created by zale on 2017/2/13.
+ * Created by zale on 2017/2/14.
  */
 
-public class BaseFooter extends ILoadMore {
+public abstract class BaseFooter {
 
-    private TextView loadMoreTv;
-    private View containterView;
+    public boolean loading = false;
+    public boolean hasMoreData = true;
+    public int currentTotal = 0;
+    public int currentPage = 1;
 
-    public BaseFooter(Context context, ViewGroup parent) {
-        initView(context,parent);
+    public boolean isEnable = true;
+
+
+    public abstract View getContainerView();
+    protected abstract void setNoMoreDataView();
+    protected abstract void setHasMoreDataView();
+    protected abstract void setLoadMoreErrorView();
+    protected abstract void hideLoadMoreView();
+    protected abstract void showLoadMoreView();
+
+    public void setState(int newDataSize,int currentPage){
+
+        if (!checkIsEnable()){
+            return;
+        }
+        if (currentPage == 1){
+            resetState();
+            isNoMoreData(newDataSize);
+        }else{
+            if (isNoMoreData(newDataSize)){
+            } else {
+                hasMoreData = true;
+                loading = false;
+                setHasMoreDataView();
+                hideLoadMoreView();
+            }
+        }
     }
 
-    public void initView(Context context,ViewGroup parent) {
-        containterView = LayoutInflater.from(context).inflate(R.layout.listitem_loadmore,parent,false);
-        loadMoreTv = (TextView) containterView.findViewById(R.id.load_more_tv);
-        containterView.setVisibility(View.GONE);
+    public boolean isNeedLoadMore(int lastPosition,int currentTotal){
+
+        if (!checkIsEnable()){
+            return false;
+        }
+
+        this.currentTotal = currentTotal;
+        if (lastPosition == currentTotal-1 && hasMoreData){
+            if (!loading){
+                currentPage++;
+                showLoadMoreView();
+                loading = true;
+                return true;
+            }
+        }
+        return false;
+
     }
 
-    @Override
-    public View getContainerView() {
-        return containterView;
+    public void setLoadingError(){
+        if (!checkIsEnable()){
+            return;
+        }
+        currentPage--;
+        loading = false;
+        setLoadMoreErrorView();
     }
 
-    @Override
-    public void setNoMoreDataView() {
-        loadMoreTv.setText("没有更多了");
+    private boolean checkIsEnable(){
+        if (!isEnable){
+            hideLoadMoreView();
+            return false;
+        }else {
+            return true;
+        }
     }
 
-    @Override
-    public void setHasMoreDataView() {
-        loadMoreTv.setText("加载更多...");
+    private void resetState(){
+        loading = false;
+        currentTotal = 0;
+        currentPage = 1;
+        hasMoreData = true;
+        hideLoadMoreView();
+        setHasMoreDataView();
     }
 
-    @Override
-    public void setLoadMoreErrorView() {
-        loadMoreTv.setText("加载失败");
+    private boolean isNoMoreData(int newDataSize){
+        if (newDataSize < BaseRecyclerViewAdapter.DEFAULT_PER_PAGE_SIZE){
+            hasMoreData = false;
+            loading = false;
+            setNoMoreDataView();
+            if (newDataSize>0){
+                showLoadMoreView();
+            }else {
+                hideLoadMoreView();
+            }
+            return true;
+        }
+        return false;
     }
-    @Override
-    public void hideLoadMoreView(){
-        containterView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showLoadMoreView(){
-        containterView.setVisibility(View.VISIBLE);
-    }
-
 }

@@ -31,6 +31,8 @@ public class RepositoryInfo{
     public String createdAt;
     @SerializedName("updated_at")
     public String updatedAt;
+    @SerializedName("html_url")
+    public String htmlUrl;
 
 //    {
 //        "id":18905701,

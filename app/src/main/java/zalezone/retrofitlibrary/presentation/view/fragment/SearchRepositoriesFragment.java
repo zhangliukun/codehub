@@ -5,7 +5,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.SearchView;
 
@@ -50,9 +49,6 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mQuery = query;
-                if (TextUtils.isEmpty(mQuery)){
-                    mQuery = "zhangliukun";
-                }
                 searchRepository(1);
                 return true;
             }
@@ -62,6 +58,7 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
                 return false;
             }
         });
+        ViewCompat.setTransitionName(searchView,"searchview");
 
         ptrFrameLayout = (PtrClassicFrameLayout) findViewById(R.id.ptr_container);
         ptrFrameLayout.setPtrHandler(new PtrDefaultHandler() {
@@ -93,23 +90,46 @@ public class SearchRepositoriesFragment extends BaseFragment implements View.OnC
             public void onItemClick(View view, int position,long id) {
                 showToastShort("你点击的是第"+position+"个位置"+" id="+id);
                 if (id>=0){
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("int", position);
-                    bundle.putString(RepositoryInfoFragment.IMAGE_URL_EXTRA,mAdapter.getItem((int) id).owner.avatar_url);
-                    View avatat = view.findViewById(R.id.repository_owner_im);
-                    ViewCompat.setTransitionName(avatat,position+"");
-                    getFragmentManager().beginTransaction().
-                            addSharedElement(avatat,position+"").
-                            add(getContainerId(),RepositoryInfoFragment.newInstance(bundle)).addToBackStack(null).commitAllowingStateLoss();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("int", position);
+//                    bundle.putString(RepositoryInfoFragment.IMAGE_URL_EXTRA,mAdapter.getItem((int) id).owner.avatar_url);
+//                    BaseFragment repoInfoFragment = RepositoryInfoFragment.newInstance(bundle);
+////                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+////                        baseFragment.setSharedElementEnterTransition(new DetailTransition());
+////                        baseFragment.setSharedElementReturnTransition(new DetailTransition());
+////                        baseFragment.setEnterTransition(new Fade());
+////                        setExitTransition(new Fade());
+////                    }
+//                    start(repoInfoFragment);
+                    start(WebViewFragment.newInstance(mAdapter.getItem((int) id).htmlUrl));
                 }
             }
         });
 
     }
 
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    public static class DetailTransition extends TransitionSet {
+//        public DetailTransition() {
+//            init();
+//        }
+//
+//        // 允许资源文件使用
+//        public DetailTransition(Context context, AttributeSet attrs) {
+//            super(context, attrs);
+//            init();
+//        }
+//
+//        private void init() {
+//            setOrdering(ORDERING_TOGETHER);
+//            addTransition(new ChangeBounds()).
+//                    addTransition(new ChangeTransform()).
+//                    addTransition(new ChangeImageTransform());
+//        }
+//    }
+
     @Override
     protected void loadData() {
-
     }
 
     @Override

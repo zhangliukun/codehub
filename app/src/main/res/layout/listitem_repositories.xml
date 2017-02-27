@@ -18,10 +18,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <!--<com.facebook.drawee.view.SimpleDraweeView-->
+            <!--android:id="@+id/repository_owner_im"-->
+            <!--android:layout_width="36dp"-->
+            <!--android:layout_height="36dp"/>-->
+
+        <ImageView
             android:id="@+id/repository_owner_im"
             android:layout_width="36dp"
-            android:layout_height="36dp"/>
+            android:layout_height="36dp"
+            android:src ="@drawable/ic_account_circle_black_48dp"/>
 
         <TextView
             android:id="@+id/repository_name"

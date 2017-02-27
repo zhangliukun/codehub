@@ -98,7 +98,7 @@ public class GithubApi {
         params.put("sort",sort);
         params.put("order",order);
         params.put("page", String.valueOf(page));
-        params.put("per_page", String.valueOf(BaseRecyclerViewAdapter.PER_PAGE_SIZE));
+        params.put("per_page", String.valueOf(BaseRecyclerViewAdapter.DEFAULT_PER_PAGE_SIZE));
         String url = "https://api.github.com/search/repositories";
         OkClient.httpGetRequest(url, params, dataCallback, new IRequestCallback<ReponseRepositories>() {
             @Override

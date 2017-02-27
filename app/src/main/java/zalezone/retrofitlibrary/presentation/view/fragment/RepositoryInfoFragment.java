@@ -1,7 +1,6 @@
 package zalezone.retrofitlibrary.presentation.view.fragment;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -32,9 +31,7 @@ public class RepositoryInfoFragment extends BaseFragment{
         String url = bundle.getString(IMAGE_URL_EXTRA);
 
         avatar = (SimpleDraweeView) findViewById(R.id.repository_owner_im);
-        ViewCompat.setTransitionName(avatar,position+"");
         avatar.setImageURI(url);
-        showToastShort("initview");
     }
 
     @Override

@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import zalezone.pullrefresh.footer.SimpleFooter;
 import zalezone.pullrefresh.footer.BaseFooter;
-import zalezone.pullrefresh.footer.ILoadMore;
 
 /**
  * Created by zale on 2017/2/9.
@@ -31,13 +31,13 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
 
     public final static int COUNT_FIXED_ITEM = 1;
 
-    public final static int PER_PAGE_SIZE =20;
+    public static int DEFAULT_PER_PAGE_SIZE =20;
 
     protected MultiItemType<T> multiItemType;
 
     private OnItemClickListener mOnItemClickListener;
 
-    protected ILoadMore loadMoreFooterView;
+    protected BaseFooter loadMoreFooterView;
 
     protected RecyclerView mRecyclerView;
 
@@ -56,10 +56,14 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
     }
 
     private void initDefaultLoadMoreView() {
-        loadMoreFooterView = new BaseFooter(mContext,mRecyclerView);
+        loadMoreFooterView = new SimpleFooter(mContext,mRecyclerView);
     }
 
-    public abstract void bindDataToItemView(VH vh, T item);
+    public void setDefaultPerPageSize(int perPageSize){
+        DEFAULT_PER_PAGE_SIZE = perPageSize;
+    }
+
+    public abstract void bindDataToItemView(VH vh, T item,int position);
 
     public abstract int getAdapterLayout();
 
@@ -121,7 +125,7 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
         }
     }
 
-    public ILoadMore getFooter(){
+    public BaseFooter getFooter(){
         return loadMoreFooterView;
     }
 
@@ -145,7 +149,7 @@ public abstract class BaseRecyclerViewAdapter<T,VH extends BaseRecyclerViewAdapt
     public void onBindViewHolder(final VH holder, int position) {
         if (getItemViewType(position) < FIXED_ITEM_LOAD_MORE){
             T item = getItem(getRealDataPosition(position));
-            bindDataToItemView(holder,item);
+            bindDataToItemView(holder,item,position);
         }
         if (mOnItemClickListener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
