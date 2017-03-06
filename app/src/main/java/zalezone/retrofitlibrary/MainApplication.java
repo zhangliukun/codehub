@@ -6,6 +6,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 
+import zalezone.retrofitlibrary.experiment.hotswapclass.ClassLoaderManager;
 import zalezone.retrofitlibrary.network.OkClient;
 
 /**
@@ -20,5 +21,6 @@ public class MainApplication extends Application{
         OkClient.initOkHttp(this);
         ImagePipelineConfig config = OkHttpImagePipelineConfigFactory.newBuilder(this,OkClient.getOkHttpClient()).build();
         Fresco.initialize(this,config);
+        ClassLoaderManager.init(this);
     }
 }

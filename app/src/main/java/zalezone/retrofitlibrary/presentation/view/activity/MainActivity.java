@@ -30,8 +30,8 @@ import zalezone.retrofitlibrary.presentation.presenter.MainActivityPresenter;
 import zalezone.retrofitlibrary.presentation.view.adapter.adapterimpl.MenuItemAdapter;
 import zalezone.retrofitlibrary.presentation.view.fragment.SearchRepositoriesFragment;
 import zalezone.retrofitlibrary.presentation.view.fragment.UserInfoFragment;
-import zalezone.retrofitlibrary.presentation.widget.ZBottomNavigation;
-import zalezone.retrofitlibrary.presentation.widget.ZBottomNavigationItem;
+import zalezone.retrofitlibrary.presentation.widget.bottomnavigation.ZBottomNavigation;
+import zalezone.retrofitlibrary.presentation.widget.bottomnavigation.ZBottomNavigationItem;
 import zalezone.retrofitlibrary.util.ImageUitl;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,AdapterView.OnItemClickListener,MainActivityContract.View{
@@ -221,6 +221,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,A
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch ((int) id){
             case 0:
+                //ClassLoaderManager.getInstance().printInfo();
                 break;
             default:
                 break;

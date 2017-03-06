@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <zalezone.retrofitlibrary.presentation.widget.ZBottomNavigation
+            <zalezone.retrofitlibrary.presentation.widget.bottomnavigation.ZBottomNavigation
                 android:id="@+id/nav_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

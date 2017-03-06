@@ -25,4 +25,15 @@
 
     <style name="AppWelcome" parent="android:Theme.Translucent.NoTitleBar.Fullscreen"/>
 
+    <declare-styleable name="TimeAxisView">
+        <attr name="axis_image_src" format="reference"/>
+        <attr name="line_point">
+            <enum name="both" value="0"/>
+            <enum name="up" value="1"/>
+            <enum name="down" value="2"/>
+        </attr>
+        <attr name="line_color" format="color"/>
+        <attr name="line_thinkness" format="dimension"/>
+    </declare-styleable>
+
 </resources>

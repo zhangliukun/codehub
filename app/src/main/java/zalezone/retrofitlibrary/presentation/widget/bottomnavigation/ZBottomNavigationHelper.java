@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.presentation.widget;
+package zalezone.retrofitlibrary.presentation.widget.bottomnavigation;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;

@@ -1,4 +1,4 @@
-package zalezone.retrofitlibrary.presentation.widget;
+package zalezone.retrofitlibrary.presentation.widget.bottomnavigation;
 
 /**
  * Created by zale on 2017/2/9.
