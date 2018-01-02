@@ -23,6 +23,10 @@ public class TimeAxisView extends View {
     public static final int LINE_POINT_UP = 1;
     public static final int LINE_POINT_DOWN = 2;
 
+    public static final int IMAGE_TOP = 0;
+    public static final int IMAGE_CENTER = 1;
+    public static final int IMAGE_BOTTOM = 2;
+
     Context mContext;
 
     Paint mPaint;
@@ -31,6 +35,7 @@ public class TimeAxisView extends View {
     int mLinePoint;
     int mLineColor;
     int mLineThinkness;
+    int mImageMode;
 
     Bitmap mAxisBitmap;
 
@@ -39,6 +44,7 @@ public class TimeAxisView extends View {
     private int centerX;
     private int imageTop;
     private int imageBottom;
+
 
     public TimeAxisView(Context context) {
         this(context,null);
@@ -56,6 +62,8 @@ public class TimeAxisView extends View {
         mLinePoint = a.getInt(R.styleable.TimeAxisView_line_point,0);
         mLineColor = a.getColor(R.styleable.TimeAxisView_line_color, Color.BLACK);
         mLineThinkness = a.getDimensionPixelSize(R.styleable.TimeAxisView_line_thinkness,1);
+        mImageMode = a.getInt(R.styleable.TimeAxisView_axis_image_mode,IMAGE_CENTER);
+
         a.recycle();
 
         init();
@@ -76,15 +84,27 @@ public class TimeAxisView extends View {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        int imageSize = height/3;
-        int imageLm = (width - imageSize)/2;
-        int imageRm = imageLm+imageSize;
+        switch (mImageMode){
+            case IMAGE_TOP:
+                imageTop = 0;
+                imageBottom = width;
+                centerX = width/2;
+                rectF.set(0,imageTop,width,imageBottom);
+                break;
+            case IMAGE_CENTER:
+                imageTop = height/3;
+                imageBottom = height/3*2;
+                centerX = height/3/2;
+                rectF.set(0,imageTop,height/3,imageBottom);
+                break;
+            case IMAGE_BOTTOM:
+                imageTop = height-width;
+                imageBottom = height;
+                centerX = width/2;
+                rectF.set(0,imageTop,width,imageBottom);
+                break;
+        }
 
-        centerX = width/2;
-        imageTop = imageSize;
-        imageBottom = imageSize*2;
-
-        rectF.set(imageLm,height/3,imageRm,height/3*2);
     }
 
     @Override

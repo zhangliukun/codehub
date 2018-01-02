@@ -32,6 +32,11 @@
             <enum name="up" value="1"/>
             <enum name="down" value="2"/>
         </attr>
+        <attr name="axis_image_mode">
+            <enum name = "top" value="0"/>
+            <enum name = "center" value="1"/>
+            <enum name = "bottom" value="2"/>
+        </attr>
         <attr name="line_color" format="color"/>
         <attr name="line_thinkness" format="dimension"/>
     </declare-styleable>
